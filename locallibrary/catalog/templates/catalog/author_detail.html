@@ -1,0 +1,23 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<p>
+  <strong>Author:</strong>
+  <a href="{{ book.author.get_absolute_url }}">{{ book.author }}</a>
+</p>
+
+
+  <p>({{ book.author.date_of_birth }} - {{ book.author.date_of_birth }})</p>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h4>Books</h4>
+
+    {% for object in book.objects.all() %}
+      <hr />
+      {% if object.author = book.author %}
+        <a href="{{ object.get_absolute_url }}">{{ object.title }}</a><strong>({{ object.isbn }})</strong>
+        <p>{{ object.summary }}</p>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endblock %}
