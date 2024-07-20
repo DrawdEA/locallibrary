@@ -20,4 +20,8 @@
     <li><strong>Books Containing "Book":</strong> {{ num_specific_books }}</li>
     <li><strong>Genres Containing "Fantasy":</strong> {{ num_specific_genres }}</li>
   </ul>
+
+  <p>
+    You have visited this page {{ num_visits }} time{{ num_visits|pluralize }}.
+  </p>
 {% endblock %}
