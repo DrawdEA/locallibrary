@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+from datetime import date
 
 # Create your models here.
 
@@ -103,6 +105,12 @@ class BookInstance(models.Model):
     book = models.ForeignKey('Book', on_delete=models.RESTRICT, null=True)
     imprint = models.CharField(max_length=200)
     due_back = models.DateField(null=True, blank=True)
+    borrower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+
+    @property
+    def is_overdue(self):
+        """Determines if the book is overdue based on due date and current date."""
+        return bool(self.due_back and date.today() > self.due_back)
 
     LOAN_STATUS = (
         ('m', 'Maintenance'),
@@ -121,6 +129,7 @@ class BookInstance(models.Model):
 
     class Meta:
         ordering = ['due_back']
+        permissions = (("can_mark_returned", "Set book as returned"),)
 
     def __str__(self):
         """String for representing the Model object."""
@@ -131,7 +140,7 @@ class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     date_of_birth = models.DateField(null=True, blank=True)
-    date_of_death = models.DateField('Died', null=True, blank=True)
+    date_of_death = models.DateField('died', null=True, blank=True)
 
     class Meta:
         ordering = ['last_name', 'first_name']
